@@ -2,14 +2,18 @@
 
 require_once('../_helpers/strip.php');
 
-// https://depthsecurity.com/blog/exploitation-xml-external-entity-xxe-injection
-
-libxml_disable_entity_loader (false);
+// 1. On bloque le chargement d'entités externes (Comportement sécurisé)
+// Note: true est la valeur sécurisée. (Cette fonction est obsolète sur PHP 8+ car sécurisé par défaut)
+libxml_disable_entity_loader(true); 
 
 $xml = strlen($_GET['xml']) > 0 ? $_GET['xml'] : '<root><content>No XML found</content></root>';
 
 $document = new DOMDocument();
-$document->loadXML($xml, LIBXML_NOENT | LIBXML_DTDLOAD);
+
+// 2. On supprime les drapeaux dangereux LIBXML_NOENT et LIBXML_DTDLOAD
+// On charge simplement le XML.
+$document->loadXML($xml); 
+
 $parsedDocument = simplexml_import_dom($document);
 
 echo $parsedDocument->content;
