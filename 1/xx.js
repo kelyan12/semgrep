@@ -6,11 +6,13 @@ const router = express.Router()
 router.post('/upload-products', (req, res) => {
     const XMLfile = req.files.products.data;
     
-    // CORRECTION : noent passe à false, et on ajoute nonet à true par sécurité
+    // CORRECTION : Disable entity expansion, network access, and DTD loading to prevent XXE
     const products = libxmljs.parseXmlString(XMLfile, {
-        noent: false, 
+        noent: false,
         nonet: true,
-        noblanks: true
+        noblanks: true,
+        dtdload: false,
+        dtdvalid: false
     })
 
     products.root().childNodes().forEach(product => {
