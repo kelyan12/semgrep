@@ -12,7 +12,7 @@ $document = new DOMDocument();
 
 // 2. On supprime les drapeaux dangereux LIBXML_NOENT et LIBXML_DTDLOAD
 // On charge simplement le XML.
-$document->loadXML($xml); 
+$document->loadXML($xml, LIBXML_NONET); 
 
 $parsedDocument = simplexml_import_dom($document);
 
